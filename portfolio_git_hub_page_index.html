@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>תיק עבודות – מחולל לוגו (GitHub Pages)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'Heebo',system-ui}
+    .checkerboard{background-image:linear-gradient(45deg,#f6f7f9 25%,transparent 25%),linear-gradient(-45deg,#f6f7f9 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#f6f7f9 75%),linear-gradient(-45deg,transparent 75%,#f6f7f9 75%);background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0}
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+  <!-- Header -->
+  <header class="bg-white/80 backdrop-blur border-b sticky top-0 z-20">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-xl md:text-2xl font-bold">תיק עבודות – מחולל לוגו וובי</h1>
+      <nav class="flex gap-2 text-sm">
+        <a href="#about" class="px-3 py-2 rounded-xl hover:bg-slate-100">על הפרויקט</a>
+        <a href="#features" class="px-3 py-2 rounded-xl hover:bg-slate-100">יכולות</a>
+        <a href="#gallery" class="px-3 py-2 rounded-xl hover:bg-slate-100">גלריה</a>
+        <a href="#links" class="px-3 py-2 rounded-xl hover:bg-slate-100">קישורים</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 pt-8 pb-16 space-y-12">
+    <!-- Hero / Summary -->
+    <section id="about" class="grid md:grid-cols-2 gap-6 items-center">
+      <div class="space-y-4">
+        <h2 class="text-2xl md:text-3xl font-extrabold">מחולל לוגו – אפליקציית ווב חד‑קובץ</h2>
+        <p class="text-slate-700 leading-relaxed">
+          כלי יצירת לוגואים עם תמיכה בעברית ובאנגלית, ייבוא SVG מותאם אישית, חבילת אייקונים נרחבת,
+          שמירת Presets ל‑LocalStorage/JSON, הורדות מקצועיות (SVG/PNG/ZIP) ויצוא PDF 
+          של דף הנחיות מותג (A4). נבנה כ‑<strong>קובץ HTML יחיד</strong> – קל להעלאה ל‑GitHub Pages.
+        </p>
+        <!-- EDIT ME: שם היוצר/ת -->
+        <p class="text-sm text-slate-500">נבנה ע"י <strong>אביטל ניסן</strong> • 2025</p>
+        <div class="flex flex-wrap gap-2">
+          <!-- EDIT ME: לינק לדמו החי (GitHub Pages של האפליקציה עצמה) -->
+          <a href="https://USERNAME.github.io/logo-maker-app/" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-sky-600 text-white hover:bg-sky-700">
+            🚀 דמו חי
+          </a>
+          <!-- EDIT ME: ריפו קוד מקור -->
+          <a href="https://github.com/USERNAME/logo-maker-app" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border hover:bg-white">
+            🧩 קוד מקור
+          </a>
+          <!-- EDIT ME: ריפו העמוד הזה -->
+          <a href="https://github.com/USERNAME/portfolio" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border hover:bg-white">
+            📁 ריפו תיק העבודות
+          </a>
+        </div>
+      </div>
+
+      <!-- Live iframe preview (optional) -->
+      <div class="checkerboard rounded-2xl p-4">
+        <div class="rounded-2xl overflow-hidden border bg-white">
+          <!-- EDIT ME: עדכני את ה-src ל‑GitHub Pages של האפליקציה -->
+          <iframe src="https://USERNAME.github.io/logo-maker-app/" title="תצוגת דמו" class="w-full h-[420px]"></iframe>
+        </div>
+        <p class="text-xs text-slate-500 mt-2">אם ה‑iframe חסום, ניתן לפתוח את הדמו בכפתור "דמו חי".</p>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="space-y-6">
+      <h3 class="text-xl font-bold">יכולות עיקריות</h3>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="rounded-2xl border bg-white p-4">
+          <h4 class="font-semibold">עריכה חיה</h4>
+          <p class="text-sm text-slate-600">שם מותג, שורה שנייה, פריסות (וורדמרק/אייקון/Badge), פונט, צבעים וריווחים.</p>
+        </div>
+        <div class="rounded-2xl border bg-white p-4">
+          <h4 class="font-semibold">ייבוא SVG מותאם אישית</h4>
+          <p class="text-sm text-slate-600">העלאת אייקון אישי ושילובו בלוגו.</p>
+        </div>
+        <div class="rounded-2xl border bg-white p-4">
+          <h4 class="font-semibold">חבילת אייקונים מורחבת</h4>
+          <p class="text-sm text-slate-600">רפואי/פיננסי/טק/כללי – spine, cross, chart, circuit ועוד.</p>
+        </div>
+        <div class="rounded-2xl border bg-white p-4">
+          <h4 class="font-semibold">שמירת Presets</h4>
+          <p class="text-sm text-slate-600">שמירה ל‑LocalStorage ויצוא/ייבוא JSON.</p>
+        </div>
+        <div class="rounded-2xl border bg-white p-4">
+          <h4 class="font-semibold">הורדות מקצועיות</h4>
+          <p class="text-sm text-slate-600">SVG, PNG (@2x/@4x, רקע שקוף), ו‑Brand Kit ZIP.</p>
+        </div>
+        <div class="rounded-2xl border bg-white p-4">
+          <h4 class="font-semibold">PDF הנחיות מותג</h4>
+          <p class="text-sm text-slate-600">יצוא A4 של צבעים, טיפוגרפיה, פריסה ואייקון.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery -->
+    <section id="gallery" class="space-y-4">
+      <h3 class="text-xl font-bold">גלריה</h3>
+      <p class="text-sm text-slate-600">צילומי מסך לדוגמה (החליפי בקבצים משלך בתיקיית <code>assets/</code>):</p>
+      <div class="grid md:grid-cols-3 gap-4">
+        <!-- EDIT ME: החליפי את הנתיבים לקבצים שלך -->
+        <figure class="rounded-2xl overflow-hidden border bg-white"><img src="assets/screenshot-1.png" alt="תצוגה – מסך ראשי" class="w-full h-64 object-cover"/><figcaption class="p-2 text-xs text-slate-500">מסך ראשי</figcaption></figure>
+        <figure class="rounded-2xl overflow-hidden border bg-white"><img src="assets/screenshot-2.png" alt="תצוגה – ייבוא SVG" class="w-full h-64 object-cover"/><figcaption class="p-2 text-xs text-slate-500">ייבוא SVG</figcaption></figure>
+        <figure class="rounded-2xl overflow-hidden border bg-white"><img src="assets/screenshot-3.png" alt="ייצוא PDF" class="w-full h-64 object-cover"/><figcaption class="p-2 text-xs text-slate-500">ייצוא PDF</figcaption></figure>
+      </div>
+    </section>
+
+    <!-- Links & Setup -->
+    <section id="links" class="space-y-4">
+      <h3 class="text-xl font-bold">קישורים והתקנה</h3>
+      <div class="rounded-2xl border bg-white p-4 space-y-2 text-sm text-slate-700">
+        <p><strong>דמו חי:</strong> <a class="text-sky-700 underline" href="https://USERNAME.github.io/logo-maker-app/" target="_blank">https://USERNAME.github.io/logo-maker-app/</a></p>
+        <p><strong>ריפו קוד מקור:</strong> <a class="text-sky-700 underline" href="https://github.com/USERNAME/logo-maker-app" target="_blank">github.com/USERNAME/logo-maker-app</a></p>
+        <p><strong>עמוד הפרויקט (הקובץ הזה):</strong> שימי את הקובץ <code>index.html</code> בריפו GitHub Pages של התיק עבודות, למשל <code>USERNAME.github.io</code>.</p>
+        <hr class="my-2">
+        <ol class="list-decimal pr-5 space-y-1">
+          <li>צרי ריפו ל‑Portfolio (למשל <code>USERNAME.github.io</code>) והעליי אליו את הקובץ הזה כ‑<code>index.html</code>.</li>
+          <li>צרי ריפו נפרד לאפליקציה (למשל <code>logo-maker-app</code>) והעליי את קובץ האפליקציה <code>index.html</code> (גרסת v0.3).</li>
+          <li>ב‑Settings → Pages הפעילי GitHub Pages לכל ריפו. תקבלי שני לינקים: אחד לעמוד תיק העבודות ואחד לדמו החי.</li>
+          <li>עדכני למעלה את המחרוזות <code>USERNAME</code> לשם המשתמש שלך.</li>
+          <li>(רשות) הוסיפי תקיית <code>assets/</code> עם צילומי מסך משלך לעמוד זה.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center text-xs text-slate-500 pt-8">© 2025 אביטל ניסן – כל הזכויות שמורות</footer>
+  </main>
+</body>
+</html>
