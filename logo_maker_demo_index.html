@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>דמו – מחולל לוגו</title>
+  <meta name="description" content="דמו אפליקציית ווב ליצירת לוגו – עברית/אנגלית, אייקון מותאם, יצוא SVG/PNG ו‑PDF A4 הנחיות מותג, שמירת Preset.">
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;600;800&family=Rubik:wght@300;400;600;800&family=Assistant:wght@300;400;600;800&family=Poppins:wght@300;400;600;800&family=Open+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- jsPDF + svg2pdf לצורך יצוא PDF A4 -->
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/svg2pdf.js@2.2.1/dist/svg2pdf.umd.min.js"></script>
+  <!-- להמרת SVG ל‑PNG -->
+  <script src="https://cdn.jsdelivr.net/npm/canvg@3.0.10/lib/umd.js"></script>
+  <style>
+    :root{--bg:#0b1220;--card:#0f172a;--muted:#94a3b8;--ring:#38bdf8}
+    body{background:linear-gradient(120deg,#0b1220,#111827);color:#e5e7eb}
+    .panel{background:rgba(255,255,255,0.04);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.08)}
+    .sw{width:28px;height:28px;border-radius:8px;border:1px solid rgba(255,255,255,.2);cursor:pointer}
+    .checker{background-image:linear-gradient(45deg,#f3f4f6 25%,transparent 25%),linear-gradient(-45deg,#f3f4f6 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#f3f4f6 75%),linear-gradient(-45deg,transparent 75%,#f3f4f6 75%);background-size:16px 16px;background-position:0 0,0 8px,8px -8px,-8px 0}
+    .font-heebo{font-family:'Heebo',system-ui}
+    .font-rubik{font-family:'Rubik',system-ui}
+    .font-assistant{font-family:'Assistant',system-ui}
+    .font-poppins{font-family:'Poppins',system-ui}
+    .font-opensans{font-family:'Open Sans',system-ui}
+    .tool-btn{border:1px solid rgba(255,255,255,.14)}
+    .tool-btn:hover{border-color:#38bdf8}
+  </style>
+</head>
+<body class="font-heebo">
+  <header class="sticky top-0 z-20">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-xl md:text-2xl font-bold">🎨 מחולל לוגו – דמו</h1>
+      <div class="text-xs text-slate-400">RTL + EN • SVG/PNG/PDF • Presets • ייבוא SVG</div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 pb-24 grid lg:grid-cols-3 gap-6">
+    <!-- Controls -->
+    <aside class="panel rounded-2xl p-4 space-y-4 lg:col-span-1">
+      <div class="flex items-center justify-between">
+        <h2 class="font-semibold">הגדרות</h2>
+        <button id="aiSuggest" class="tool-btn px-3 py-1.5 rounded-xl text-sm">🤖 הצעת AI</button>
+      </div>
+
+      <div class="space-y-2">
+        <label class="text-sm text-slate-300">שם המותג</label>
+        <input id="brand" class="w-full px-3 py-2 rounded-xl bg-white/5 border border-white/10 focus:outline-none focus:ring-2 focus:ring-sky-400" placeholder="לדוגמה: קליניקת שורש / Root Clinic"/>
+      </div>
+
+      <div class="space-y-2">
+        <label class="text-sm text-slate-300">שורת משנה (טאגליין)</label>
+        <input id="tagline" class="w-full px-3 py-2 rounded-xl bg-white/5 border border-white/10 focus:ring-2 focus:ring-sky-400" placeholder="בריאות. דיוק. חיוך."/>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="text-sm text-slate-300">שפה/פונט</label>
+          <select id="font" class="w-full px-3 py-2 rounded-xl bg-white/5 border border-white/10">
+            <option value="font-heebo">Heebo (עברית)</option>
+            <option value="font-rubik">Rubik (עברית/EN)</option>
+            <option value="font-assistant">Assistant (עברית)</option>
+            <option value="font-poppins">Poppins (EN)</option>
+            <option value="font-opensans">Open Sans (EN)</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-sm text-slate-300">משקל פונט</label>
+          <select id="weight" class="w-full px-3 py-2 rounded-xl bg-white/5 border border-white/10">
+            <option value="300">300</option>
+            <option value="400" selected>400</option>
+            <option value="600">600</option>
+            <option value="800">800</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label class="text-sm text-slate-300">צבע עיקרי</label>
+        <div class="flex items-center gap-2 mt-2">
+          <input type="color" id="primaryColor" class="h-9 w-12 rounded-xl bg-white/5 border border-white/10" value="#3b82f6"/>
+          <div class="flex gap-2">
+            <button class="sw" data-col="#3b82f6" style="background:#3b82f6"></button>
+            <button class="sw" data-col="#10b981" style="background:#10b981"></button>
+            <button class="sw" data-col="#ef4444" style="background:#ef4444"></button>
+            <button class="sw" data-col="#f59e0b" style="background:#f59e0b"></button>
+            <button class="sw" data-col="#8b5cf6" style="background:#8b5cf6"></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-3 gap-2">
+        <label class="col-span-3 text-sm text-slate-300">פריסת לוגו</label>
+        <button class="tool-btn px-3 py-2 rounded-xl text-sm layout" data-layout="wordmark">וורדמרק</button>
+        <button class="tool-btn px-3 py-2 rounded-xl text-sm layout" data-layout="icon-left">אייקון משמאל</button>
+        <button class="tool-btn px-3 py-2 rounded-xl text-sm layout" data-layout="badge">Badge</button>
+      </div>
+
+      <div class="space-y-2">
+        <label class="text-sm text-slate-300">ייבוא אייקון SVG מותאם</label>
+        <input id="iconFile" type="file" accept="image/svg+xml" class="w-full text-sm"/>
+        <p class="text-xs text-slate-400">העלו קובץ SVG – הוא יוטמע בלוגו.</p>
+      </div>
+
+      <div class="space-y-2">
+        <label class="text-sm text-slate-300">חבילת אייקונים (רפואי/פיננסי/טק)</label>
+        <div class="grid grid-cols-5 gap-2 text-center">
+          <button class="tool-btn rounded-xl p-2 text-xs icon-pick" data-icon="medical" title="Medical">🩺</button>
+          <button class="tool-btn rounded-xl p-2 text-xs icon-pick" data-icon="tooth" title="Dental">🦷</button>
+          <button class="tool-btn rounded-xl p-2 text-xs icon-pick" data-icon="finance" title="Finance">📈</button>
+          <button class="tool-btn rounded-xl p-2 text-xs icon-pick" data-icon="chip" title="Tech">💾</button>
+          <button class="tool-btn rounded-xl p-2 text-xs icon-pick" data-icon="shield" title="Security">🛡️</button>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-2 pt-2">
+        <button id="savePreset" class="tool-btn rounded-xl px-3 py-2 text-sm">💾 שמור Preset</button>
+        <button id="loadPreset" class="tool-btn rounded-xl px-3 py-2 text-sm">📂 טען Preset</button>
+        <input id="presetFile" type="file" accept="application/json" class="hidden"/>
+        <button id="clearPreset" class="tool-btn rounded-xl px-3 py-2 text-sm">🧹 איפוס</button>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-2 pt-2">
+        <button id="downloadSVG" class="tool-btn rounded-xl px-3 py-2 text-sm">⬇️ SVG</button>
+        <button id="downloadPNG" class="tool-btn rounded-xl px-3 py-2 text-sm">⬇️ PNG</button>
+        <button id="downloadPDF" class="tool-btn rounded-xl px-3 py-2 text-sm">⬇️ PDF A4</button>
+      </div>
+    </aside>
+
+    <!-- Preview -->
+    <section class="lg:col-span-2 space-y-4">
+      <div class="panel rounded-2xl p-4">
+        <div class="flex items-center justify-between">
+          <h2 class="font-semibold">תצוגה</h2>
+          <div class="text-xs text-slate-400">גרור כדי לשמור תמונה • רקע שקוף</div>
+        </div>
+        <div class="checker rounded-2xl p-6 mt-3 flex items-center justify-center">
+          <svg id="logoSvg" xmlns="http://www.w3.org/2000/svg" width="760" height="280" viewBox="0 0 760 280" class="bg-white/0">
+            <defs>
+              <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.25)"/>
+              </filter>
+            </defs>
+            <g id="layout" filter="url(#shadow)">
+              <!-- Icon placeholder -->
+              <g id="icon" transform="translate(40,40)"></g>
+              <!-- Text group -->
+              <g id="textGroup" transform="translate(200,80)">
+                <text id="brandText" x="0" y="0" font-size="64" font-weight="600" fill="#3b82f6">Brand</text>
+                <text id="taglineText" x="0" y="36" font-size="20" fill="#6b7280">Tagline goes here</text>
+              </g>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <!-- 3 quick layout variants -->
+      <div class="grid md:grid-cols-3 gap-4">
+        <div class="panel rounded-2xl p-4">
+          <h3 class="font-semibold mb-2">וורדמרק</h3>
+          <div class="bg-white/5 rounded-xl p-3 checker">
+            <svg id="mini1" viewBox="0 0 360 140" class="w-full h-32"></svg>
+          </div>
+        </div>
+        <div class="panel rounded-2xl p-4">
+          <h3 class="font-semibold mb-2">אייקון משמאל</h3>
+          <div class="bg-white/5 rounded-xl p-3 checker">
+            <svg id="mini2" viewBox="0 0 360 140" class="w-full h-32"></svg>
+          </div>
+        </div>
+        <div class="panel rounded-2xl p-4">
+          <h3 class="font-semibold mb-2">Badge</h3>
+          <div class="bg-white/5 rounded-xl p-3 checker">
+            <svg id="mini3" viewBox="0 0 360 140" class="w-full h-32"></svg>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="max-w-7xl mx-auto px-4 pb-8 text-xs text-slate-400">© 2025 Demo. Google Fonts: Heebo/Rubik/Assistant/Poppins/Open Sans.</footer>
+
+<script>
+// ------- Model state -------
+const state = {
+  layout: 'icon-left',
+  brand: 'Root Clinic',
+  tagline: 'בריאות. דיוק. חיוך.',
+  fontClass: 'font-heebo',
+  weight: 600,
+  color: '#3b82f6',
+  icon: 'medical', // or custom svg string
+  customIcon: null,
+};
+
+const el = (id)=>document.getElementById(id);
+
+// ------- Icons (inline SVG paths) -------
+const ICONS = {
+  medical:`<g>
+    <circle cx="60" cy="60" r="54" fill="none" stroke="currentColor" stroke-width="8"/>
+    <path d="M60 30 v60 M30 60 h60" stroke="currentColor" stroke-width="8" stroke-linecap="round"/>
+  </g>`,
+  tooth:`<path d="M60 20c-18 0-32 14-32 32 0 24 10 52 16 52 6 0 8-12 16-12s10 12 16 12c6 0 16-28 16-52 0-18-14-32-32-32z" fill="currentColor"/>`,
+  finance:`<g fill="none" stroke="currentColor" stroke-width="6"><path d="M20 80h80"/><rect x="24" y="50" width="12" height="30"/><rect x="46" y="40" width="12" height="40"/><rect x="68" y="30" width="12" height="50"/></g>`,
+  chip:`<g fill="none" stroke="currentColor" stroke-width="6"><rect x="20" y="20" width="80" height="80" rx="10"/><rect x="40" y="40" width="40" height="40"/><path d="M60 20v-12M80 24l8-8M92 60h12M80 96l8 8M60 100v12M28 96l-8 8M20 60H8M28 24l-8-8" stroke-linecap="round"/></g>`,
+  shield:`<path d="M60 12l36 12v28c0 26-16 46-36 56-20-10-36-30-36-56V24l36-12z" fill="none" stroke="currentColor" stroke-width="8"/>`,
+};
+
+// ------- Apply state to main SVG -------
+function render() {
+  // text + font
+  const brandText = el('brandText');
+  const taglineText = el('taglineText');
+  brandText.textContent = state.brand || 'Brand';
+  taglineText.textContent = state.tagline || '';
+
+  // font class + weight
+  ['font-heebo','font-rubik','font-assistant','font-poppins','font-opensans'].forEach(c=>{
+    brandText.classList.remove(c); taglineText.classList.remove(c);
+  });
+  brandText.classList.add(state.fontClass);
+  taglineText.classList.add(state.fontClass);
+  brandText.setAttribute('font-weight', state.weight);
+
+  // color
+  brandText.setAttribute('fill', state.color);
+
+  // icon
+  const iconGroup = el('icon');
+  iconGroup.innerHTML='';
+  const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+  g.setAttribute('fill','currentColor');
+  g.setAttribute('stroke','currentColor');
+  g.setAttribute('transform','scale(1.6)');
+  const inner = document.createElementNS('http://www.w3.org/2000/svg','g');
+  inner.innerHTML = state.customIcon || ICONS[state.icon] || '';
+  g.appendChild(inner);
+  iconGroup.appendChild(g);
+
+  // layout positions
+  const textGroup = el('textGroup');
+  if(state.layout==='wordmark'){
+    iconGroup.setAttribute('display','none');
+    textGroup.setAttribute('transform','translate(60,130)');
+  } else if(state.layout==='icon-left'){
+    iconGroup.setAttribute('display','block');
+    iconGroup.setAttribute('transform','translate(60,60)');
+    textGroup.setAttribute('transform','translate(220,130)');
+  } else { // badge
+    iconGroup.setAttribute('display','block');
+    iconGroup.setAttribute('transform','translate(320,40)');
+    textGroup.setAttribute('transform','translate(220,180)');
+  }
+
+  // mini previews
+  renderMini('mini1','wordmark');
+  renderMini('mini2','icon-left');
+  renderMini('mini3','badge');
+}
+
+function renderMini(id, layout){
+  const svg = el(id);
+  svg.innerHTML='';
+  const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+  const col = state.color;
+  if(layout==='wordmark'){
+    g.innerHTML = `<text x="20" y="78" font-size="38" font-weight="${state.weight}" fill="${col}" class="${state.fontClass}">${state.brand||'Brand'}</text>`;
+  }else if(layout==='icon-left'){
+    g.innerHTML = `<g transform="translate(18,18)" fill="${col}" stroke="${col}">${state.customIcon||ICONS[state.icon]||''}</g><text x="120" y="78" font-size="34" font-weight="${state.weight}" fill="${col}" class="${state.fontClass}">${state.brand||'Brand'}</text>`;
+  }else{
+    g.innerHTML = `<g transform="translate(150,12)" fill="${col}" stroke="${col}">${state.customIcon||ICONS[state.icon]||''}</g><text x="20" y="120" font-size="22" fill="#94a3b8" class="${state.fontClass}">${state.tagline||''}</text>`;
+  }
+  svg.appendChild(g);
+}
+
+// ------- Events -------
+['brand','tagline'].forEach(id=>{
+  el(id).addEventListener('input',e=>{ state[id]=e.target.value; saveLS(); render(); });
+});
+
+el('font').addEventListener('change',e=>{ state.fontClass=e.target.value; saveLS(); render(); });
+
+el('weight').addEventListener('change',e=>{ state.weight=+e.target.value; saveLS(); render(); });
+
+document.querySelectorAll('.sw').forEach(b=>b.addEventListener('click',()=>{ const c=b.getAttribute('data-col'); el('primaryColor').value=c; state.color=c; saveLS(); render(); }));
+
+el('primaryColor').addEventListener('input',e=>{ state.color=e.target.value; saveLS(); render(); });
+
+document.querySelectorAll('.layout').forEach(b=>b.addEventListener('click',()=>{ state.layout=b.dataset.layout; saveLS(); render(); }));
+
+document.querySelectorAll('.icon-pick').forEach(b=>b.addEventListener('click',()=>{ state.icon=b.dataset.icon; state.customIcon=null; saveLS(); render(); }));
+
+el('iconFile').addEventListener('change', async (e)=>{
+  const file=e.target.files[0]; if(!file) return;
+  const text = await file.text();
+  // נקי viewBox/מילויים זרים – הטמעה כ‑innerSVG
+  state.customIcon = new DOMParser().parseFromString(text,'image/svg+xml').documentElement.innerHTML;
+  saveLS(); render();
+});
+
+// ------- Presets -------
+function saveLS(){ localStorage.setItem('logo-demo', JSON.stringify(state)); }
+function loadLS(){ try{ const s=JSON.parse(localStorage.getItem('logo-demo')); if(s) Object.assign(state,s);}catch(e){} }
+
+el('savePreset').addEventListener('click',()=>{
+  const blob = new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='logo_preset.json'; a.click(); URL.revokeObjectURL(a.href);
+});
+
+el('loadPreset').addEventListener('click',()=>el('presetFile').click());
+el('presetFile').addEventListener('change',async(e)=>{const f=e.target.files[0]; if(!f) return; const t=await f.text(); try{Object.assign(state,JSON.parse(t)); saveLS(); render();}catch(err){alert('Preset לא תקין');}});
+
+el('clearPreset').addEventListener('click',()=>{ localStorage.removeItem('logo-demo'); location.reload(); });
+
+// ------- Downloads -------
+function download(filename, href){ const a=document.createElement('a'); a.href=href; a.download=filename; a.click(); }
+
+el('downloadSVG').addEventListener('click',()=>{
+  const svg = el('logoSvg').cloneNode(true);
+  // הפוך את ה‑currentColor לערך קבוע
+  svg.querySelectorAll('[stroke="currentColor"],[fill="currentColor"]').forEach(n=>{
+    n.setAttribute('stroke', state.color); n.setAttribute('fill', state.color);
+  });
+  const s = new XMLSerializer().serializeToString(svg);
+  const blob = new Blob([s],{type:'image/svg+xml'});
+  download('logo.svg', URL.createObjectURL(blob));
+});
+
+el('downloadPNG').addEventListener('click', async()=>{
+  const svg = el('logoSvg');
+  const { Canvg } = window['umd'];
+  const canvas = document.createElement('canvas'); canvas.width=svg.viewBox.baseVal.width; canvas.height=svg.viewBox.baseVal.height;
+  const ctx = canvas.getContext('2d');
+  const v = await Canvg.from(ctx, new XMLSerializer().serializeToString(svg));
+  await v.render();
+  download('logo.png', canvas.toDataURL('image/png'));
+});
+
+el('downloadPDF').addEventListener('click', async()=>{
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({orientation:'portrait', unit:'pt', format:'a4'});
+  const pageW = doc.internal.pageSize.getWidth();
+  const margin = 40;
+  // כותרת
+  doc.setFont('helvetica','bold'); doc.setFontSize(20);
+  doc.text('Brand Guidelines', margin, 60);
+  doc.setFont('helvetica','normal'); doc.setFontSize(12);
+  doc.text(`Brand: ${state.brand}`, margin, 84);
+  doc.text(`Tagline: ${state.tagline}`, margin, 100);
+  // הוספת ה‑SVG
+  const svgNode = el('logoSvg').cloneNode(true);
+  svgNode.setAttribute('width','500'); svgNode.setAttribute('height','180');
+  await window.svg2pdf(svgNode, doc, {x: margin, y: 130, width: pageW - margin*2});
+  // צבעים ופונטים
+  doc.setFont('helvetica','bold'); doc.text('Color', margin, 340);
+  doc.setDrawColor(0); doc.setFillColor(...hexToRgb(state.color)); doc.rect(margin, 350, 40, 40, 'F');
+  doc.setFont('helvetica','bold'); doc.text('Typography', margin+100, 340);
+  doc.setFont('helvetica','normal'); doc.text(`${classToFont(state.fontClass)} • ${state.weight}`, margin+100, 360);
+  doc.save('brand-guidelines.pdf');
+});
+
+function hexToRgb(hex){ const m = hex.replace('#',''); return [parseInt(m.substr(0,2),16),parseInt(m.substr(2,2),16),parseInt(m.substr(4,2),16)]; }
+function classToFont(c){ return { 'font-heebo':'Heebo','font-rubik':'Rubik','font-assistant':'Assistant','font-poppins':'Poppins','font-opensans':'Open Sans' }[c] || 'Heebo'; }
+
+// ------- AI Suggest (mock) -------
+const AI_NAMES = ['Nova','Pulse','Apex','נובה','בראשית','לביא','שורש','קוואנטום'];
+const AI_TAGS = ['Innovate. Create. Lead.','Care. Precision. Trust.','בריאות. דיוק. חיוך.','פיננסים חכמים בפשטות','טכנולוגיה שמקרבת אנשים'];
+const AI_COLS = ['#3b82f6','#10b981','#ef4444','#8b5cf6','#f59e0b'];
+el('aiSuggest').addEventListener('click',()=>{
+  state.brand = pick(AI_NAMES); state.tagline = pick(AI_TAGS); state.color = pick(AI_COLS); state.icon = pick(Object.keys(ICONS)); state.customIcon=null; saveLS();
+  el('brand').value=state.brand; el('tagline').value=state.tagline; el('primaryColor').value=state.color; render();
+});
+function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+// ------- Init -------
+loadLS();
+el('brand').value = state.brand; el('tagline').value = state.tagline; el('primaryColor').value = state.color; el('font').value = state.fontClass; el('weight').value = String(state.weight);
+render();
+</script>
+</body>
+</html>
